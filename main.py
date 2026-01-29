@@ -84,7 +84,7 @@ elif choice == "3":
 else:
     print("Invalid choice")
    
-=======
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -170,4 +170,4 @@ elif choice == "3":
     stroke_prediction()
 else:
     print("Invalid choice")
->>>>>>> 706805378f0a4b9fbb281e42e876d7f8605c6596
+
