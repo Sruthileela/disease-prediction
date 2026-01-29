@@ -1,29 +1,85 @@
-# main.py - Our main program
-print("🎉 Welcome to Disease Prediction Project!")
-print("This is our first Python file!")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
-# Simple calculation
-age = 45
-print(f"Age: {age} years")
+def diabetes_prediction():
+    data = pd.read_csv("data/diabetes.csv")
+    X = data.drop("Outcome", axis=1)
+    y = data["Outcome"]
 
-# Simple list
-diseases = ["Diabetes", "Heart Disease", "Stroke"]
-print(f"Diseases to predict: {diseases}")
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
 
-# main.py - Updated
-from src.data_loader import load_sample_data
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
 
-print("=== Disease Prediction System ===")
-print("Loading data...")
+    y_pred = model.predict(X_test)
+    print("Diabetes Accuracy:", accuracy_score(y_test, y_pred))
 
-# Load data
-df = load_sample_data()
-print(f"\nData loaded: {len(df)} patients")
-print(df.head())
+    sample = [X.iloc[0].tolist()]
+    result = model.predict(sample)
+    print("Diabetes Prediction:", "YES" if result[0] == 1 else "NO")
 
-print("\n✅ Project structure complete!")
-print("\nNext steps:")
-print("1. Get real medical datasets")
-print("2. Add more diseases")
-print("3. Create web interface")
-print("4. Upload to GitHub")
+
+def heart_prediction():
+    data = pd.read_csv("data/heart.csv")
+    X = data.drop("result", axis=1)
+    y = data["result"]
+    X = pd.get_dummies(X)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+    print("Heart Disease Accuracy:", accuracy_score(y_test, y_pred))
+
+    sample = [X.iloc[0].tolist()]
+    result = model.predict(sample)
+    print("Heart Disease Prediction:", "YES" if result[0] == 1 else "NO")
+
+
+def stroke_prediction():
+    data = pd.read_csv("data/stroke.csv")
+    data = data.dropna()
+
+    X = data.drop("stroke", axis=1)
+    y = data["stroke"]
+
+    X = pd.get_dummies(X)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
+
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+    print("Stroke Accuracy:", accuracy_score(y_test, y_pred))
+
+    sample = [X.iloc[0].tolist()]
+    result = model.predict(sample)
+    print("Stroke Prediction:", "YES" if result[0] == 1 else "NO")
+
+
+print("Select Disease")
+print("1. Diabetes")
+print("2. Heart Disease")
+print("3. Stroke")
+
+choice = input("Enter choice (1/2/3): ")
+
+if choice == "1":
+    diabetes_prediction()
+elif choice == "2":
+    heart_prediction()
+elif choice == "3":
+    stroke_prediction()
+else:
+    print("Invalid choice")
